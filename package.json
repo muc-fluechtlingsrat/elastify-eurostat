@@ -1,0 +1,18 @@
+{
+  "name": "elastify-eurostat",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "elasticsearch": "^13.0.0-rc2",
+    "jsonstat": "^0.13.3",
+    "node-fetch": "^1.6.3",
+    "rc": "^1.2.1"
+  }
+}

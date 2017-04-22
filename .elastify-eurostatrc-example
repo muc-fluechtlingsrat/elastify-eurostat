@@ -1,0 +1,11 @@
+{
+  "elasticHost": {
+    "host": "",
+    "auth": "user:password",
+    "protocol": "https",
+    "port": 9200
+  },
+  "elasticLog": "error",
+  "elasticIndexPrefix": "asylum_data_eurostat_",
+  "elasticType": "migr_asyappctza_by_sex"
+}
