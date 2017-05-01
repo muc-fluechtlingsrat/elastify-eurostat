@@ -15,28 +15,22 @@ const getDateString = () => {
   return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDay())}`;
 };
 
-const persistRow = row => {
+const logRow = row => {
   const document = {
     value: row.value,
     time: row.time,
     geo: row.geo,
     sex: row.sex,
+    citizen: row.citizen,
   };
 
   console.log(document);
   console.log('-'.repeat(80));
 
-  // client.index({
-  //   index: `${config.elasticIndexPrefix}${getDateString()}`,
-  //   type: config.elasticType,
-  //   body: document
-  // }).then(
-  //   () => console.log('Document persisted.'),
-  //   error => console.log('Error persisting document:', error)
-  // );
 };
 
-const apiUri = 'https://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/migr_asyappctza?citizen=TOTAL&sex=F&sex=M&sex=UNK&precision=1&unit=PER&age=TOTAL&asyl_app=ASY_APP';
+//const apiUri = 'https://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/migr_asyappctza?citizen=TOTAL&sex=F&sex=M&sex=UNK&precision=1&unit=PER&age=TOTAL&asyl_app=ASY_APP';
+const apiUri = 'http://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/de/migr_asyappctza?citizen=AF&citizen=ER&citizen=IQ&citizen=IR&citizen=NG&citizen=PK&citizen=SO&citizen=SY&sex=F&sex=M&sex=UNK&precision=1&sinceTimePeriod=2016&unit=PER&filterNonGeo=1&shortLabel=1&age=TOTAL&unitLabel=label'
 
 fetch(apiUri)
   .then(
@@ -50,6 +44,6 @@ fetch(apiUri)
 
     table
       .filter(row => row.geo !== 'Total')
-      .forEach(persistRow);
+      .forEach(logRow);
   });
 
