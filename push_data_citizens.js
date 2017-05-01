@@ -38,8 +38,7 @@ const persistRows = rows => {
   );
 };
 
-//const apiUri = 'https://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/migr_asyappctza?sex=M&sex=UNK&precision=1&unit=PER&age=TOTAL&asyl_app=ASY_APP';
-const apiUri = 'http://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/de/migr_asyappctza?citizen=AF&citizen=ER&citizen=IQ&citizen=IR&citizen=NG&citizen=PK&citizen=SO&citizen=SY&sex=F&sex=M&sex=UNK&precision=1&sinceTimePeriod=2016&filterNonGeo=1&shortLabel=1&age=TOTAL&unitLabel=label'
+const apiUri = 'http://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/de/migr_asyappctza?citizen=AF&citizen=ER&citizen=IQ&citizen=IR&citizen=NG&citizen=PK&citizen=SO&citizen=SY&sex=F&sex=M&sex=UNK&precision=1&sinceTimePeriod=2016&filterNonGeo=1&shortLabel=1&age=TOTAL&unitLabel=label&asyl_app=NASY_APP'
 fetch(apiUri)
   .then(
     res => res.json(),
