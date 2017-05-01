@@ -50,15 +50,3 @@ fetch(apiUri)
       .forEach(persistRow);
   });
 
-require('fs').writeFile(
-
-    './eurostat.json',
-
-    JSON.stringify(myArray),
-
-    function (err) {
-        if (err) {
-            console.error('Crap happens');
-        }
-    }
-);
