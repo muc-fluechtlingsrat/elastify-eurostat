@@ -1,3 +1,4 @@
+const flatten = require('lodash/flatten');
 const fetch = require('node-fetch');
 const elasticsearch = require('elasticsearch');
 const JSONstat = require('jsonstat');
@@ -15,20 +16,23 @@ const getDateString = () => {
   return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDay())}`;
 };
 
-const persistRow = row => {
-  const document = {
+const persistRows = rows => {
+  const documents = rows.map(row => ({
     value: row.value,
     time: row.time,
     geo: row.geo,
     sex: row.sex,
-  };
+  }));
 
-  client.index({
-    index: `${config.elasticIndexPrefix}${getDateString()}`,
+  const indexAction = { index: {} };
+  const body = flatten(documents.map(document => [indexAction, document]));
+
+  client.bulk({
     type: config.elasticType,
-    body: document
+    index: `${config.elasticIndexPrefix}${getDateString()}`,
+    body,
   }).then(
-    () => console.log('Document persisted.'),
+    () => console.log(`${documents.length} document persisted.`),
     error => console.log('Error persisting document:', error)
   );
 };
@@ -43,10 +47,9 @@ fetch(apiUri)
   .then(data => {
     const table = JSONstat(data)
       .Dataset(0)
-      .toTable({ type : 'arrobj' });
+      .toTable({ type : 'arrobj' })
+      .filter(row => row.geo !== 'Total');
 
-    table
-      .filter(row => row.geo !== 'Total')
-      .forEach(persistRow);
+    persistRows(table);
   });
 
