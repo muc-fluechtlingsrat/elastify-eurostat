@@ -38,19 +38,26 @@ const persistRows = rows => {
   );
 };
 
-//const apiUri = 'https://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/migr_asyappctza?sex=M&sex=UNK&precision=1&unit=PER&age=TOTAL&asyl_app=ASY_APP';
-const apiUri = 'http://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/de/migr_asyappctza?citizen=AF&citizen=ER&citizen=IQ&citizen=IR&citizen=NG&citizen=PK&citizen=SO&citizen=SY&sex=F&sex=M&sex=UNK&precision=1&sinceTimePeriod=2016&filterNonGeo=1&shortLabel=1&age=TOTAL&unitLabel=label'
-fetch(apiUri)
-  .then(
-    res => res.json(),
-    error => console.log('Error fetching data from Eurostat:', error)
-  )
-  .then(data => {
-    const table = JSONstat(data)
-      .Dataset(0)
-      .toTable({ type : 'arrobj' })
-      .filter(row => row.geo !== 'Total');
+// const citizenCountryCodes = ['AF', 'ER', 'IQ', 'IR', 'NG', 'PK', 'SO', 'SY'];
+const citizenCountryCodes = ['AF'];
 
-    persistRows(table);
+for (let sinceTimePeriod = 2016; sinceTimePeriod <= 2017; sinceTimePeriod++) {
+  citizenCountryCodes.forEach(citizenCountryCode => {
+    const apiUri = `http://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/de/migr_asyappctza?citizen=${citizenCountryCode}&sex=F&sex=M&sex=UNK&precision=1&sinceTimePeriod=${sinceTimePeriod}&filterNonGeo=1&shortLabel=1&age=TOTAL&unitLabel=label`;
+
+    fetch(apiUri)
+      .then(
+        res => res.json(),
+        error => console.log('Error fetching data from Eurostat:', error)
+      )
+      .then(data => {
+        const table = JSONstat(data)
+          .Dataset(0)
+          .toTable({ type : 'arrobj' })
+          .filter(row => row.geo !== 'Total');
+
+        console.log(table)
+        // persistRows(table);
+      });  
   });
-
+}
