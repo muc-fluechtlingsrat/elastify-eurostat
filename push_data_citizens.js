@@ -56,8 +56,7 @@ for (let sinceTimePeriod = 2016; sinceTimePeriod <= 2017; sinceTimePeriod++) {
           .toTable({ type : 'arrobj' })
           .filter(row => row.geo !== 'Total');
 
-        console.log(table)
-        // persistRows(table);
+        persistRows(table);
       });  
   });
 }
