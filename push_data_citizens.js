@@ -3,6 +3,7 @@ const fetch = require('node-fetch');
 const elasticsearch = require('elasticsearch');
 const JSONstat = require('jsonstat');
 const config = require('rc')('elastify-eurostat');
+const citizenCountryCodes = require('./countryCodes.js');
 
 const client = new elasticsearch.Client({
   host: config.elasticHost,
@@ -38,9 +39,6 @@ const persistRows = rows => {
   );
 };
 
-// const citizenCountryCodes = ['AF', 'ER', 'IQ', 'IR', 'NG', 'PK', 'SO', 'SY'];
-const citizenCountryCodes = ['AF'];
-
 for (let sinceTimePeriod = 2016; sinceTimePeriod <= 2017; sinceTimePeriod++) {
   citizenCountryCodes.forEach(citizenCountryCode => {
     const apiUri = `http://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/de/migr_asyappctza?citizen=${citizenCountryCode}&sex=F&sex=M&sex=UNK&precision=1&sinceTimePeriod=${sinceTimePeriod}&filterNonGeo=1&shortLabel=1&age=TOTAL&unitLabel=label`;
@@ -51,12 +49,18 @@ for (let sinceTimePeriod = 2016; sinceTimePeriod <= 2017; sinceTimePeriod++) {
         error => console.log('Error fetching data from Eurostat:', error)
       )
       .then(data => {
-        const table = JSONstat(data)
-          .Dataset(0)
-          .toTable({ type : 'arrobj' })
-          .filter(row => row.geo !== 'Total');
+        if (data !== null) {
+          const table = JSONstat(data)
+            .Dataset(0)
+            .toTable({ type : 'arrobj' })
+            .filter(row => row.geo !== 'Total');
 
-        persistRows(table);
+            console.log(table)
+          // persistRows(table);  
+        }
+        else {
+          console.error('No data for ' + apiUri);
+        }
       });  
   });
 }
