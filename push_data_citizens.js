@@ -39,28 +39,56 @@ const persistRows = rows => {
   );
 };
 
-for (let sinceTimePeriod = 2016; sinceTimePeriod <= 2017; sinceTimePeriod++) {
-  citizenCountryCodes.forEach(citizenCountryCode => {
-    const apiUri = `http://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/de/migr_asyappctza?citizen=${citizenCountryCode}&sex=F&sex=M&sex=UNK&precision=1&sinceTimePeriod=${sinceTimePeriod}&filterNonGeo=1&shortLabel=1&age=TOTAL&unitLabel=label`;
+const fetchFromUriAndPersit = uri => {
+  return fetch(uri)
+    .then(
+      res => res.json(),
+      error => console.log('Error fetching data from Eurostat:', error)
+    )
+    .then(data => {
+      const table = JSONstat(data)
+        .Dataset(0)
+        .toTable({ type : 'arrobj' })
+        .filter(row => row.geo !== 'Total');
 
-    fetch(apiUri)
-      .then(
-        res => res.json(),
-        error => console.log('Error fetching data from Eurostat:', error)
-      )
-      .then(data => {
-        if (data !== null) {
-          const table = JSONstat(data)
-            .Dataset(0)
-            .toTable({ type : 'arrobj' })
-            .filter(row => row.geo !== 'Total');
+      console.log(`got ${table.length} rows for ${uri}`);
+      persistRows(table);
+    });
+};
 
-            console.log(table)
-          // persistRows(table);  
-        }
-        else {
-          console.error('No data for ' + apiUri);
-        }
-      });  
-  });
+const getQueue = () => {
+  let queue = [];
+
+  for (let sinceTimePeriod = 2016; sinceTimePeriod <= 2017; sinceTimePeriod++) {
+    citizenCountryCodes.forEach(citizenCountryCode => {
+      const uri = `http://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/de/migr_asyappctza` +
+        `?citizen=${citizenCountryCode}` +
+        `&sex=F` +
+        `&sex=M` +
+        `&sex=UNK` +
+        `&precision=1` +
+        `&sinceTimePeriod=${sinceTimePeriod}` +
+        `&filterNonGeo=1` +
+        `&shortLabel=1` +
+        `&age=TOTAL` +
+        `&unitLabel=label`;
+      queue.push(uri);
+    });
+  }
+
+  return queue;
+};
+
+{
+  const queue = getQueue();
+
+  const getNext = position => {
+    fetchFromUriAndPersit(queue[position]).then(() => {
+      if (position < queue.length - 1) {
+        setTimeout(() => getNext(position + 1), 1000);
+      }
+    });
+  };
+
+  getNext(0);
 }
