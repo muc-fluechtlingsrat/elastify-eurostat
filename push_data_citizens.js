@@ -14,7 +14,7 @@ const getDateString = () => {
   const now = new Date();
   const pad = num => (num < 10 ? '0' : '') + num;
 
-  return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDay())}`;
+  return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
 };
 
 const persistRows = rows => {
