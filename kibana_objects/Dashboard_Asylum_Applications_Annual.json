@@ -1,0 +1,26 @@
+[
+  {
+    "_id": "AV58O_TG5FDmiXbyzeWW",
+    "_type": "dashboard",
+    "_source": {
+      "title": "Asylum Applications Annual",
+      "hits": 0,
+      "description": "",
+      "panelsJSON": "[{\"col\":1,\"id\":\"AV58Oj0k5FDmiXbyzeWK\",\"panelIndex\":1,\"row\":1,\"size_x\":9,\"size_y\":2,\"type\":\"visualization\"},{\"col\":6,\"id\":\"AV58NtY-5FDmiXbyzeVx\",\"panelIndex\":2,\"row\":3,\"size_x\":5,\"size_y\":3,\"type\":\"visualization\"},{\"col\":1,\"id\":\"AV58N-As5FDmiXbyzeV4\",\"panelIndex\":3,\"row\":3,\"size_x\":5,\"size_y\":3,\"type\":\"visualization\"},{\"col\":10,\"id\":\"AV58OKeR5FDmiXbyzeV_\",\"panelIndex\":4,\"row\":1,\"size_x\":3,\"size_y\":2,\"type\":\"visualization\"},{\"col\":1,\"id\":\"AV58QVPp5FDmiXbyzeW7\",\"panelIndex\":5,\"row\":6,\"size_x\":6,\"size_y\":3,\"type\":\"visualization\"},{\"col\":7,\"id\":\"AV58Q0jv5FDmiXbyzeXJ\",\"panelIndex\":6,\"row\":6,\"size_x\":6,\"size_y\":3,\"type\":\"visualization\"},{\"col\":1,\"id\":\"AV58RJnt5FDmiXbyzeXT\",\"panelIndex\":7,\"row\":9,\"size_x\":6,\"size_y\":3,\"type\":\"visualization\"},{\"size_x\":6,\"size_y\":3,\"panelIndex\":8,\"type\":\"visualization\",\"id\":\"AV58Svt05FDmiXbyzeX-\",\"col\":7,\"row\":9}]",
+      "optionsJSON": "{\"darkTheme\":false}",
+      "uiStateJSON": "{}",
+      "version": 1,
+      "timeRestore": true,
+      "timeTo": "now",
+      "timeFrom": "now-10y",
+      "refreshInterval": {
+        "display": "Off",
+        "pause": false,
+        "value": 0
+      },
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"filter\":[{\"query\":{\"match_all\":{}}}],\"highlightAll\":true,\"version\":true}"
+      }
+    }
+  }
+]

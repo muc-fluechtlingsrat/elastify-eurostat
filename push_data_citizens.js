@@ -60,7 +60,7 @@ const fetchFromUriAndPersit = uri => {
 const getQueue = () => {
   let queue = [];
 
-  for (let sinceTimePeriod = 2016; sinceTimePeriod <= 2017; sinceTimePeriod++) {
+  for (let sinceTimePeriod = 2008; sinceTimePeriod <= 2015; sinceTimePeriod++) {
     citizenCountryCodes.forEach(citizenCountryCode => {
       const uri = `http://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/de/migr_asyappctza` +
         `?citizen=${citizenCountryCode}` +

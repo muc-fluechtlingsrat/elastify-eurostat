@@ -13,13 +13,13 @@ const getDateString = () => {
   const now = new Date();
   const pad = num => (num < 10 ? '0' : '') + num;
 
-  return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDay())}`;
+  return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
 };
 
   const indexAction = { index: {} };
 var body = {
    "mappings" : {
-      "migr_asyappctza_by_sex" : {
+      "eurostat_migr_asyappctza" : {
          "properties" : {
             "value" : {
                "type" : "long"
@@ -29,6 +29,7 @@ var body = {
             },
             "geo" : {
                "type" : "text",
+               "fielddata": true,
                "fields" : {
                   "keyword" : {
                      "type" : "keyword",
@@ -38,6 +39,16 @@ var body = {
             },
             "sex" : {
                "type" : "text",
+               "fields" : {
+                  "keyword" : {
+                     "type" : "keyword",
+                     "ignore_above" : 256
+                  }
+               }
+            },
+            "citizen" : {
+               "type" : "text",
+               "fielddata": true,
                "fields" : {
                   "keyword" : {
                      "type" : "keyword",
