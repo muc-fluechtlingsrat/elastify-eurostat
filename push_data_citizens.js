@@ -24,6 +24,7 @@ const persistRows = rows => {
     geo: row.geo,
     sex: row.sex,
     citizen: row.citizen,
+    asyl_app: row.asyl_app
   }));
 
   const indexAction = { index: {} };
