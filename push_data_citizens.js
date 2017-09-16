@@ -42,6 +42,13 @@ const persistRows = rows => {
 
 const fetchFromUriAndPersit = uri => {
   return fetch(uri)
+    .then(function(res) {
+        if (!res.ok) {
+            console.log(res.statusText);
+            process.exit(1);
+        }
+        return res;
+    })
     .then(
       res => res.json(),
       error => console.log('Error fetching data from Eurostat:', error)
@@ -71,6 +78,7 @@ const getQueue = () => {
         `&filterNonGeo=1` +
         `&shortLabel=1` +
         `&age=TOTAL` +
+        `&asyl_app=ASY_APP` +
         `&unitLabel=label`;
       queue.push(uri);
     });
