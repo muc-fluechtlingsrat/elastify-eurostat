@@ -7,7 +7,7 @@ const citizenCountryCodes = require('./countryCodes.js');
 
 const client = new elasticsearch.Client({
   host: config.elasticHost,
-  log: config.elasticLog
+  log: config.elasticLog,
   requestTimeout: 60000
 });
 
@@ -34,7 +34,7 @@ const persistRows = rows => {
 
   client.bulk({
     type: config.elasticType,
-    index: `${config.elasticIndexPrefix}citizen_${getDateString()}`,
+    index: `${config.elasticIndexPrefix}`,
     body,
   }).then(
     () => console.log(`${documents.length} document persisted.`),
