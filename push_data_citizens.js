@@ -8,6 +8,7 @@ const citizenCountryCodes = require('./countryCodes.js');
 const client = new elasticsearch.Client({
   host: config.elasticHost,
   log: config.elasticLog
+  requestTimeout: 60000
 });
 
 const getDateString = () => {
@@ -22,6 +23,7 @@ const persistRows = rows => {
     value: row.value,
     time: row.time,
     geo: row.geo,
+    age: row.age,
     sex: row.sex,
     citizen: row.citizen,
     asyl_app: row.asyl_app
@@ -77,7 +79,6 @@ const getQueue = () => {
         `&sinceTimePeriod=2008` +
         `&filterNonGeo=1` +
         `&shortLabel=1` +
-        `&age=TOTAL` +
         `&asyl_app=ASY_APP` +
         `&unitLabel=label`;
       queue.push(uri);
@@ -92,7 +93,7 @@ const getQueue = () => {
   const getNext = position => {
     fetchFromUriAndPersit(queue[position]).then(() => {
       if (position < queue.length - 1) {
-        setTimeout(() => getNext(position + 1), 1000);
+        setTimeout(() => getNext(position + 1), 3000);
       }
     });
   };
