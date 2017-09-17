@@ -17,9 +17,10 @@ const getDateString = () => {
 };
 
   const indexAction = { index: {} };
+// take type from config - should be read from there
 var body = {
    "mappings" : {
-      "eurostat_migr_asyappctza" : {
+      "full_migr_asyappctza" : {
          "properties" : {
             "value" : {
                "type" : "long"
@@ -48,7 +49,15 @@ var body = {
             },
             "citizen" : {
                "type" : "text",
-               "fielddata": true,
+               "fields" : {
+                  "keyword" : {
+                     "type" : "keyword",
+                     "ignore_above" : 256
+                  }
+               }
+            },
+            "age" : {
+               "type" : "text",
                "fields" : {
                   "keyword" : {
                      "type" : "keyword",
@@ -61,7 +70,7 @@ var body = {
    }
 }
 
-client.indices.create({index:`${config.elasticIndexPrefix}citizen_${getDateString()}`, body:body});
+client.indices.create({index:`${config.elasticIndexPrefix}`, body:body});
 //client.indices.putMapping({index:`${config.elasticIndexPrefix}${getDateString()}`, type:config.elasticType, body:body});
 
 
