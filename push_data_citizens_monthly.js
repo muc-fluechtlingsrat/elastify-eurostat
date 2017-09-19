@@ -63,6 +63,7 @@ const fetchFromUriAndPersit = uri => {
 
       console.log(`got ${table.length} rows for ${uri}`);
       persistRows(table);
+      //console.log(table);
     });
 };
 
@@ -73,12 +74,11 @@ const getQueue = () => {
       const uri = `http://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/de/migr_asyappctzm` +
         `?citizen=${citizenCountryCode}` +
         `&sex=F` +
-        `&sex=M` +
-        `&sex=UNK` +
         `&precision=1` +
-        `&sinceTimePeriod=2017` +
+        `&sinceTimePeriod=2008M01` +
         `&filterNonGeo=1` +
         `&shortLabel=1` +
+        `&age=Y14-17` +
         `&asyl_app=ASY_APP` +
         `&unitLabel=label`;
       queue.push(uri);
