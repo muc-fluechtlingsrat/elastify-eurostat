@@ -4,6 +4,8 @@ Some corner stones to make sure our plots aren't way off
 ###  Germany all asylum applications
 Should be around 
 
+yearly
+
 Year | bpb | eurostat | our |
 -----|-----:|-------:|-----:|
 2016 | 747561  | 745155 | 743410|
@@ -15,11 +17,20 @@ Year | bpb | eurostat | our |
 1992 | 440183  | 438190 | 444420 |
 1988 | 105064  | 103075 | 103185|
 
+monthly
+
+Month | bpb | eurostat | our |
+-----|-----:|-------:|-----:|
+2015 01 | 25042 | 26875 | x |
+2016 08 | 91331 | 94350 | 
+
 
 Sources: 
 - bpb: https://www.bpb.de/politik/innenpolitik/flucht/218788/zahlen-zu-asyl-in-deutschland
-- eurostat: http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=migr_asyctz&lang=en  til 2007
-   http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=migr_asyappctza&lang=en from 2008 on
+- eurostat: 
+   - http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=migr_asyctz&lang=en  til 2007
+   - http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=migr_asyappctza&lang=en from 2008 on
+   - http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=migr_asyappctzm&lang=en
 
 Remarks: 
 - BAMF split Gesamtanträge into Erstanträge and Folgeanträge since 1995
