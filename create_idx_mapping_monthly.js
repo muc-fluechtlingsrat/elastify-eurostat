@@ -26,7 +26,8 @@ var body = {
                "type" : "long"
             },
             "time" : {
-               "type" : "date"
+               "type" : "date",
+               "format" : "yyyy'M'MM"
             },
             "geo" : {
                "type" : "text",
