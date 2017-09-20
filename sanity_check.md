@@ -37,8 +37,21 @@ Remarks:
 eurostat since 2008
 - Giving only the numbers since 2008 produces a misleading picture because of the Jugoslawia war peak in the 90s (cf bpb graphic in the above link)
 
+## Some first check if a run is OK
 
+If we ran e.g. the following command:
 
+   nohup node push_data_citizens_monthly.js 1> month_2.out 2>month_2.err &
+
+1. Check that month_2.err is empty
+2. Check that the (number of "got" messages) == (number of "persisted" messages)
+ 
+    grep -wc got month_2.out 
+    grep -wc persisted month_2.out 
+
+3. Check that the script looped through all countries of origin
+cat month_2.out | egrep -o 'citizen=[A-Z]{2,5}' | sort -u | wc -l
+wc -l countryCodes.js
 
 
 
