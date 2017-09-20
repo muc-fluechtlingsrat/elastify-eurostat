@@ -35,4 +35,7 @@ and start over.
 If you want to see the data, no elasticsearch: 
 * `node log_citizen_data.js | less`
 
+# to get all citizen codes (citizen.dic)
+wget  'http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&file=dic%2Fen%2Fcitizen.dic'
 
+return 3706 codes
