@@ -4,6 +4,8 @@ const elasticsearch = require('elasticsearch');
 const JSONstat = require('jsonstat');
 const config = require('rc')('elastify-eurostat');
 const citizenCountryCodes = require('./countryCodes.js');
+const sexCodes = ['F','M','UNK'];
+const ageClasses = ['Y_LT14','Y14-17','Y18-34','Y35-64','Y_GE65','UNK']
 
 const client = new elasticsearch.Client({
   host: config.elasticHost,
@@ -70,19 +72,21 @@ const fetchFromUriAndPersit = uri => {
 const getQueue = () => {
   let queue = [];
 
-    citizenCountryCodes.forEach(citizenCountryCode => {
+  citizenCountryCodes.forEach(citizenCountryCode => {
+    sexCodes.forEach(sexCode => {
+    ageClasses.forEach(ageClass => {
       const uri = `http://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/de/migr_asyappctzm` +
         `?citizen=${citizenCountryCode}` +
-        `&sex=F` +
+        `&sex=${sexCode}` +
+        `&age=${ageClass}` +
         `&precision=1` +
-        `&sinceTimePeriod=2008M01` +
+        `&sinceTimePeriod=2015M01` +
         `&filterNonGeo=1` +
         `&shortLabel=1` +
-        `&age=Y14-17` +
         `&asyl_app=ASY_APP` +
         `&unitLabel=label`;
       queue.push(uri);
-    });
+    })})});
 
   return queue;
 };
