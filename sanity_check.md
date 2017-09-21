@@ -53,5 +53,8 @@ If we ran e.g. the following command:
 cat month_2.out | egrep -o 'citizen=[A-Z]{2,5}' | sort -u | wc -l
 wc -l countryCodes.js
 
+Note: For consistent naming, run
+
+    SCRIPT=push_data_decisions_quarterly.js; nohup node $SCRIPT 1>$(basename $SCRIPT .js)_$(date +%Y%m%d).out 2>$(basename $SCRIPT .js)_$(date +%Y%m%d).err &
 
 
