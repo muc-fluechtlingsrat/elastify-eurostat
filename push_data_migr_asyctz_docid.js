@@ -1,38 +1,45 @@
+// pushing pre 2008 application data, annual
 const flatten = require('lodash/flatten');
 const fetch = require('node-fetch');
 const elasticsearch = require('elasticsearch');
 const JSONstat = require('jsonstat');
 const config = require('rc')('elastify-eurostat');
-const citizenCountryCodes = require('./countryCodes.js');
-const sexCodes = ['F','M','UNK'];
-const ageClasses = ['Y_LT14','Y14-17','Y18-34','Y35-64','Y_GE65','UNK']
+const citizenCountryCodes = require('./countryCodesPre2008.js');
 
 const client = new elasticsearch.Client({
   host: config.elasticHost,
-  log: config.elasticLog,
-  requestTimeout: 60000
+  log: config.elasticLog
 });
 
 const getDateString = () => {
   const now = new Date();
   const pad = num => (num < 10 ? '0' : '') + num;
-
   return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+};
+
+const generateDocumentId = (time, geo, citizen) => {
+  document_id = time+geo.substring(0, 7)+citizen.substring(0, 7);
+  // make it all alphanumeric
+  document_id = document_id.replace(/[^0-9a-zA-Z]/gi, 'x');
+  return document_id;
 };
 
 const persistRows = rows => {
   const documents = rows.map(row => ({
-    value: row.value,
+    _id : generateDocumentId(row.time, row.geo, row.citizen),
+    {value: row.value,
     time: row.time,
     geo: row.geo,
-    age: row.age,
-    sex: row.sex,
-    citizen: row.citizen,
-    asyl_app: row.asyl_app
+    citizen: row.citizen}
   }));
 
-  const indexAction = { index: {} };
+  //const document_ids = rows.map(row => ({
+  //  _id : generateDocumentId(row.time, row.geo, row.citizen),
+  //})); 
+  //console.log(type(document_ids));
+  //const indexAction = { index: { document_ids.map(document_id => _id: document_id} };
   const body = flatten(documents.map(document => [indexAction, document]));
+  console.log(body);
 
   client.bulk({
     type: config.elasticType,
@@ -46,13 +53,6 @@ const persistRows = rows => {
 
 const fetchFromUriAndPersit = uri => {
   return fetch(uri)
-    .then(function(res) {
-        if (!res.ok) {
-            console.log(res.statusText);
-            process.exit(1);
-        }
-        return res;
-    })
     .then(
       res => res.json(),
       error => console.log('Error fetching data from Eurostat:', error)
@@ -61,32 +61,26 @@ const fetchFromUriAndPersit = uri => {
       const table = JSONstat(data)
         .Dataset(0)
         .toTable({ type : 'arrobj' })
-        .filter(row => row.geo !== 'Total');
+        .filter(row => row.geo !== 'Total' && row.geo !== 'Insgesamt');
 
       console.log(`got ${table.length} rows for ${uri}`);
-      persistRows(table);
       //console.log(table);
+      persistRows(table);
     });
 };
 
 const getQueue = () => {
   let queue = [];
 
-  citizenCountryCodes.forEach(citizenCountryCode => {
-    sexCodes.forEach(sexCode => {
-    ageClasses.forEach(ageClass => {
-      const uri = `http://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/de/migr_asyappctzm` +
+    citizenCountryCodes.forEach(citizenCountryCode => {
+      const uri = `http://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/de/migr_asyctz` +
         `?citizen=${citizenCountryCode}` +
-        `&sex=${sexCode}` +
-        `&age=${ageClass}` +
         `&precision=1` +
-        `&sinceTimePeriod=2015M01` +
+        `&sinceTimePeriod=2006` +
         `&filterNonGeo=1` +
-        `&shortLabel=1` +
-        `&asyl_app=ASY_APP` +
-        `&unitLabel=label`;
+        `&shortLabel=1`;
       queue.push(uri);
-    })})});
+    });
 
   return queue;
 };
@@ -97,7 +91,7 @@ const getQueue = () => {
   const getNext = position => {
     fetchFromUriAndPersit(queue[position]).then(() => {
       if (position < queue.length - 1) {
-        setTimeout(() => getNext(position + 1), 3000);
+        setTimeout(() => getNext(position + 1), 1000);
       }
     });
   };

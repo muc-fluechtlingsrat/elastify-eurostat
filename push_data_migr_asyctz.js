@@ -3,7 +3,7 @@ const fetch = require('node-fetch');
 const elasticsearch = require('elasticsearch');
 const JSONstat = require('jsonstat');
 const config = require('rc')('elastify-eurostat');
-const citizenCountryCodes = require('./countryCodesOld.js');
+const citizenCountryCodes = require('./countryCodesPre2008.js');
 
 const client = new elasticsearch.Client({
   host: config.elasticHost,
@@ -13,7 +13,6 @@ const client = new elasticsearch.Client({
 const getDateString = () => {
   const now = new Date();
   const pad = num => (num < 10 ? '0' : '') + num;
-
   return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
 };
 
@@ -30,7 +29,7 @@ const persistRows = rows => {
 
   client.bulk({
     type: config.elasticType,
-    index: `${config.elasticIndexPrefix}citizen_${getDateString()}`,
+    index: `${config.elasticIndexPrefix}`,
     body,
   }).then(
     () => console.log(`${documents.length} document persisted.`),
